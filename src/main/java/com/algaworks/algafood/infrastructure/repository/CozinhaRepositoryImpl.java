@@ -13,7 +13,7 @@ import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
 
 @Component
-public class CozinhaRepositoryImpl implements CozinhaRepository{
+public class CozinhaRepositoryImpl implements CozinhaRepository {
 
 	@PersistenceContext
 	private EntityManager manager;
