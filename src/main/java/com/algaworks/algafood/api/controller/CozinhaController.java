@@ -14,12 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.algaworks.algafood.domain.exception.EntidadeEmUsoException;
+import com.algaworks.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.algaworks.algafood.domain.model.Cozinha;
 import com.algaworks.algafood.domain.repository.CozinhaRepository;
-import com.fasterxml.jackson.databind.util.BeanUtil;
+import com.algaworks.algafood.domain.service.CadastroCozinhaService;
 
 @RestController()
 @RequestMapping("/cozinhas")
@@ -27,6 +28,9 @@ public class CozinhaController {
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
+
+	@Autowired
+	private CadastroCozinhaService cadastroCozinhaService;
 
 	@GetMapping
 	public ResponseEntity<List<Cozinha>> listarCozinhas() {
@@ -49,7 +53,7 @@ public class CozinhaController {
 
 	@PostMapping
 	ResponseEntity<Cozinha> salvar(@RequestBody Cozinha cozinha) {
-		Cozinha cozinhaMerge = cozinhaRepository.salvar(cozinha);
+		cadastroCozinhaService.salvar(cozinha);
 
 		return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
 	}
@@ -73,18 +77,16 @@ public class CozinhaController {
 	@DeleteMapping("/{id}")
 	ResponseEntity<Cozinha> deletar(@PathVariable Long id) {
 		try {
-			Cozinha cozinha = cozinhaRepository.buscarCozinha(id);
 
-			if (cozinha != null) {
-				cozinhaRepository.remover(cozinha);
+			cadastroCozinhaService.remover(id);
 
-				return ResponseEntity.noContent().build();
-			}
+			return ResponseEntity.noContent().build();
 
-			return ResponseEntity.notFound().build();
-		} catch (DataIntegrityViolationException e) {
+		} catch (EntidadeEmUsoException e) {
 
 			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (EntidadeNaoEncontradaException e) {
+			return ResponseEntity.notFound().build();
 		}
 	}
 }
