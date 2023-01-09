@@ -7,6 +7,8 @@ import com.algaworks.algafood.domain.model.Cozinha;
 public interface CozinhaRepository {
 
 	public List<Cozinha> listarCozinhas();
+	
+	public List<Cozinha>buscarPorNome(String nome);
 
 	public Cozinha buscarCozinha(Long id);
 
