@@ -48,7 +48,7 @@ public class RestauranteController {
 
 			return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
 
-		} catch (EntidadeEmUsoException e) {
+		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}
