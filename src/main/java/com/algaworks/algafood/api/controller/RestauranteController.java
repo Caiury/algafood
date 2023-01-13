@@ -1,6 +1,7 @@
 package com.algaworks.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +34,13 @@ public class RestauranteController {
 
 	@GetMapping
 	public List<Restaurante> listar() {
-		return restauranteRepository.listarTodos();
+		return restauranteRepository.findAll();
 	}
 
 	@GetMapping("/{id}")
 	public Restaurante listarPorId(@PathVariable Long id) {
-		return restauranteRepository.listarRestaurante(id);
+
+		return restauranteRepository.findById(id).get();
 	}
 
 	@PostMapping
@@ -56,11 +58,11 @@ public class RestauranteController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Restaurante restaurante) {
 		try {
-			Restaurante restauranteAtual = restauranteRepository.listarRestaurante(id);
+			    Restaurante restauranteAtual = restauranteRepository.findById(id).orElse(null);
 			if (restauranteAtual != null) {
 				BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
 
-				restauranteAtual = cadastroRestauranteService.salvar(restauranteAtual);
+			restauranteAtual = cadastroRestauranteService.salvar(restauranteAtual);
 
 				return ResponseEntity.ok(restauranteAtual);
 			}

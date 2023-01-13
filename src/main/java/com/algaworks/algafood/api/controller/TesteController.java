@@ -14,13 +14,18 @@ import com.algaworks.algafood.domain.repository.CozinhaRepository;
 @RestController
 @RequestMapping("/teste")
 public class TesteController {
-	
-	@Autowired
-	private CozinhaRepository cozinhaRepository;
-	
-	@GetMapping("/cozinhas/por-nome")
-	List<Cozinha>buscarNome(@RequestParam String nome){
-		return cozinhaRepository.buscarPorNome(nome);
-	}
+
+    @Autowired
+    private CozinhaRepository cozinhaRepository;
+
+//	@GetMapping("/cozinhas/por-nome")
+//	Cozinha buscarPorNome(@RequestParam String nome){
+//		return cozinhaRepository.findByNome(nome);
+
+    @GetMapping("/cozinhas/por-nome")
+    List<Cozinha> buscarNome(@RequestParam String nome) {
+        return cozinhaRepository.findByNomeContaining(nome);
+    }
+
 
 }
