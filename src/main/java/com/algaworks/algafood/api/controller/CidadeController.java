@@ -34,14 +34,14 @@ public class CidadeController {
 
 	@GetMapping
 	public ResponseEntity<List<Cidade>> listar() {
-		List<Cidade> cidades = cidadeRepository.listarCidades();
+		List<Cidade> cidades = cidadeRepository.findAll();
 		return ResponseEntity.ok(cidades);
 
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Cidade> listarCidade(@PathVariable Long id) {
-		Cidade cidade = cidadeRepository.listarCidade(id);
+		Cidade cidade = cidadeRepository.findById(id).orElse(null);
 
 		if (cidade != null) {
 			return ResponseEntity.ok(cidade);
@@ -65,7 +65,7 @@ public class CidadeController {
 	@PutMapping("/{id}")
 	public ResponseEntity<?> atualizar(@PathVariable Long id, @RequestBody Cidade cidade) {
 		try {
-			Cidade cidadeAtual = cidadeRepository.listarCidade(id);
+			Cidade cidadeAtual = cidadeRepository.findById(id).orElse(null);
 
 			if (cidadeAtual != null) {
 				BeanUtils.copyProperties(cidade, cidadeAtual, "id");
