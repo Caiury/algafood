@@ -38,6 +38,10 @@ public class TesteController {
         return restauranteRepository.findByTaxaFreteBetween(taxaInicial,taxaFinal);
     }
 
+    @GetMapping("/restaurante/por-nome-e-taxa")
+    List<Restaurante> buscarNomeTaxa(@RequestParam String nome, BigDecimal taxaInicial , BigDecimal taxaFinal) {
+        return restauranteRepository.find(nome,taxaInicial,taxaFinal);
+    }
 
     @GetMapping("/restaurante/por-nome")
     List<Restaurante> buscarNome(@RequestParam String nome, Long id) {
